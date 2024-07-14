@@ -4,7 +4,7 @@ class DeleteTrip {
   final TripRepository tripRepository;
 
   DeleteTrip({required this.tripRepository});
-  Future<void> call() {
-    return tripRepository.addTrip();
+  Future<void> call(int index) {
+    return tripRepository.deleteTrip(index);
   }
 }
