@@ -1,7 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:travel_app_riverpod/features/trips/data/models/trip_model.dart';
+import 'package:travel_app_riverpod/features/trips/presentation/pages/main_screen.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Hive.initFlutter((await getApplicationDocumentsDirectory()).path);
+  Hive.registerAdapter(TripModelAdapter());
+  await Hive.openBox<TripModel>('trips');
+
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -10,21 +21,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const Home(),
+      title: 'Travel App Riverpod',
+      home: MainScreen(),
+      debugShowCheckedModeBanner: false,
     );
-  }
-}
-
-class Home extends StatelessWidget {
-  const Home({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
   }
 }
